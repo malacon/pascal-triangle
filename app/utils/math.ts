@@ -49,6 +49,7 @@ export const generateTriangle = (
   size: number = 5,
   generator: number = 1
 ): Triangle => {
+  currentId = 1
   let tri = []
   for (let row = size; row >= 1; row--) {
     let currRow = []
