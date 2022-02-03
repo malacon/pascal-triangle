@@ -15,6 +15,7 @@ type LoaderData = {
   size: number
   generator: number
   showBase: boolean
+  showBisector: boolean
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -24,6 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   let size = Number(url.searchParams.get("size") || defaultSize)
   let generator = Number(url.searchParams.get("generator") || defaultGenerator)
   let showBase = url.searchParams.get("showBase") === "on"
+  let showBisector = url.searchParams.get("showBisector") === "on"
 
   const triangle = generateTriangle(size, generator)
   const data: LoaderData = {
@@ -31,6 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     size,
     generator,
     showBase,
+    showBisector,
   }
   return json(data)
 }
@@ -76,18 +79,36 @@ export default function Index() {
               defaultValue={data.generator}
             />
           </fieldset>
-          <fieldset className="border p-2 flex flex-col w-20 space-y-1">
-            <label className="font-bold" htmlFor="showBase">
-              Show Bases
+          <fieldset className="border p-2 flex flex-col w-32 space-y-1">
+            <h3 className="font-bold ">Show</h3>
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="showBase"
+            >
+              <span>Bases</span>
+              <input
+                name="showBase"
+                id="showBase"
+                className="border rounded  p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.showBase}
+              />
             </label>
-            <input
-              name="showBase"
-              id="showBase"
-              className="border rounded w-20 p-2"
-              type="checkbox"
-              onChange={e => submitForm()}
-              defaultChecked={data.showBase}
-            />
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="showBisector"
+            >
+              <span>Bisector</span>
+              <input
+                name="showBisector"
+                id="showBisector"
+                className="border rounded p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.showBisector}
+              />
+            </label>
           </fieldset>
         </div>
         <button
@@ -109,12 +130,12 @@ export default function Index() {
             </div>
           ))}
         </div>
-        {data.triangle.map((row, i) => (
-          <div key={i} className="row flex flex-row">
+        {data.triangle.map((row, rowNum) => (
+          <div key={rowNum} className="row flex flex-row">
             <div className="border-b w-6 border-r h-14 text-center flex flex-col justify-end text-xs text-gray-300  ">
               <span>{row[0].parallelRow}</span>
             </div>
-            {row.map(cell => (
+            {row.map((cell, colNum) => (
               <div
                 key={cell.id}
                 className="cell border-r border-b p-0 m-0 w-14 h-14 text-center relative"
@@ -125,9 +146,14 @@ export default function Index() {
                     {cell.value}
                   </span>
                 </div>
+                {data.showBisector && rowNum - 1 === colNum && (
+                  <div className="w-20 h-20 flex flex-col absolute bottom-4 right-4 rotate-45">
+                    <hr className="bg-gray-400 " />
+                  </div>
+                )}
                 {data.showBase && (
                   <div className="w-20 h-20 flex flex-col absolute top-4 left-4 -rotate-45">
-                    <hr className=" " />
+                    <hr className="bg-gray-400 " />
                   </div>
                 )}
               </div>
