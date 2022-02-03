@@ -50,7 +50,20 @@ export default function Index() {
   // console.log(data)
   return (
     <div className="container p-6">
-      <h1 className="font-bold text-2xl">Pascal's Triangle</h1>
+      <header className="flex flex-row place-items-end space-x-2">
+        <h1 className="font-bold text-2xl">Pascal's Triangle</h1>
+        <span>
+          (
+          <a
+            className="text-blue-700 underline"
+            target="_blank"
+            href="https://web.nmsu.edu/~davidp/hist_projects/pascalII.pdf"
+          >
+            original text
+          </a>
+          )
+        </span>
+      </header>
       <Form ref={formRef} method="get" className="w-fit">
         <div className="flex flex-row space-x-2">
           <fieldset className="border p-2 flex flex-col w-20 space-y-1">
