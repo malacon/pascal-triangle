@@ -138,13 +138,15 @@ export default function Index() {
             {row.map((cell, colNum) => (
               <div
                 key={cell.id}
-                className="cell border-r border-b p-0 m-0 w-14 h-14 text-center relative"
+                className="cell border-r border-b p-0 m-0 w-14 h-14 text-center relative group cursor-pointer transition-all hover:bg-orange-300"
               >
                 <div className="w-14 h-14 flex flex-col absolute top-0 left-0">
-                  <span>{cell.id}</span>
-                  <span className="absolute left-1/2 top-1/2">
-                    {cell.value}
-                  </span>
+                  <div className="absolute h-full w-full flex place-items-start text-sm text-gray-400 group-hover:text-gray-700 transition-all">
+                    <span className=" pl-1">{cell.id}</span>
+                  </div>
+                  <div className="absolute mx-auto h-full w-full align-middle flex place-items-center justify-center group-hover:text-xl transition-all">
+                    <span>{cell.value}</span>
+                  </div>
                 </div>
                 {data.showBisector && rowNum - 1 === colNum && (
                   <div className="w-20 h-20 flex flex-col absolute bottom-4 right-4 rotate-45">
