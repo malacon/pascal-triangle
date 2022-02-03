@@ -13,7 +13,7 @@ export function links() {
   return [{ rel: "stylesheet", href: styles }]
 }
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" }
+  return { title: "Pascal's Arithmetical Triangle" }
 }
 
 export default function App() {
