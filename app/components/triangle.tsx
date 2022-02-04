@@ -74,7 +74,7 @@ const Triangle = ({
               {settings.showBisector && rowNum === colNum && (
                 <div
                   data-type="bisector"
-                  className="w-20 h-20 flex flex-col absolute top-4 -left-10 rotate-45"
+                  className="w-20 h-1 flex flex-col absolute top-[27px] left-[-12px] rotate-45"
                 >
                   <hr className="bg-gray-400 " />
                 </div>

@@ -201,6 +201,11 @@ export default function Route() {
             exponents reciprocally the same are in the same base and are
             equidistant from its extremities.
           </p>
+          <p>
+            It is also very easy to demonstrate that the perpendicular exponent
+            of any cell when added to is parallel exponent exceeds by unity the
+            exponent of its base.
+          </p>
         </div>
 
         <div className="w-[400px] margin-auto">
