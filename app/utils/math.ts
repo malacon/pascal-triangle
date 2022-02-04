@@ -40,7 +40,14 @@ const getNameFromNumber = (num: number): string => {
   }
 }
 const generateId = () => {
-  const newId = getNameFromNumber(currentId)
+  let newId
+  if (currentId === 7) currentId++
+  if (currentId === 1) {
+    newId = getNameFromNumber(7)
+  } else {
+    newId = getNameFromNumber(currentId)
+  }
+
   currentId++
   return newId
 }
