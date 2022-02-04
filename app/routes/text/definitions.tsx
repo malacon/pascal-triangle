@@ -8,13 +8,23 @@ import {
   getPerpendicularRowCells,
 } from "~/utils/math"
 
+const CellId = ({ children }: { children: React.ReactNode }) => {
+  const [first, ...rest] = (children?.toString() || "").split("")
+  return (
+    <>
+      <span className="">{first}</span>
+      <span className="text-sm">{rest}</span>
+    </>
+  )
+}
+
 export default function Route() {
-  const size = 6
+  const size = 8
   const generator = 1
   const triangleData = generateTriangle(size, generator)
   const [toggleBases, setToggleBases] = React.useState(false)
   const [toggleBase, setToggleBase] = React.useState<number>()
-  console.log(triangleData)
+  // console.log(triangleData)
   const highlightExponents = () => {
     const exponents = document.getElementsByClassName("exponent")
     for (let exponent of exponents) {
@@ -78,7 +88,6 @@ export default function Route() {
         (exp.dataset.type === "exponent-perpendicularRow" &&
           exp.dataset.value === perpendicularRow)
       ) {
-        console.log("TOGGLING")
         exp.classList.toggle("text-2xl")
         exp.classList.toggle("text-gray-900")
       }
@@ -97,7 +106,6 @@ export default function Route() {
     triangleData.slice(0, exp).map((row, i) =>
       row.slice(0, exp - i).forEach((cell, j) => {
         const currentCell = document.getElementById(`cell-${cell.id}-triangle`)
-        console.log({ exp, parallelRow: cell.parallelRow, id: cell.id, i, j })
         if (cell.parallelRow + j < exp) {
           currentCell?.classList.toggle("full-square")
         } else {
@@ -122,13 +130,13 @@ export default function Route() {
             <Highlight
               action={highlightCells(["G", triangleData[size - 1][0].id])}
             >
-              G{triangleData[size - 1][0].id}
+              G-{triangleData[size - 1][0].id}
             </Highlight>
             ,{" "}
             <Highlight
               action={highlightCells(["G", triangleData[0][size - 1].id])}
             >
-              G{triangleData[0][size - 1].id}
+              G-{triangleData[0][size - 1].id}
             </Highlight>{" "}
             in each of which I take as many equal and contiguous parts as I
             please, beginning with{" "}
@@ -243,18 +251,28 @@ export default function Route() {
             when added to is parallel exponent exceeds by unity the exponent of
             its base.
           </p>
+          <p>
+            For example, cell S is in the third perpendicular row and in the
+            fourth parallel row and in the sixth base, and the exponents of rows
+            3 and 4, added together, exceed by unity the exponent of base 6, a
+            property which follows from the fact that the two sides of the
+            triangle have the same number of parts; but this is understood
+            rather than demonstrated.
+          </p>
         </div>
 
-        <div className="w-[400px] margin-auto">
-          <Triangle
-            generator={generator}
-            size={size}
-            settings={{
-              showBisector: false,
-              showBases: toggleBases,
-              showBase: toggleBase,
-            }}
-          />
+        <div className="w-[400px] margin-auto overflow-auto">
+          <div className="overflow-auto w-fit">
+            <Triangle
+              generator={generator}
+              size={size}
+              settings={{
+                showBisector: false,
+                showBases: toggleBases,
+                showBase: toggleBase,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

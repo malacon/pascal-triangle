@@ -26,7 +26,7 @@ export default function TextRoute() {
   // const navLinks = links
   return (
     <div className="w-screen h-screen overflow-hidden flex flex-row">
-      <div className="w-64 p-2 border-r overflow-y-auto">
+      <div className=" w-54 p-2 border-r overflow-y-auto">
         <header className="pb-4">
           <h1 className="text-2xl font-bold">Pascal's Triangle</h1>
           <span>

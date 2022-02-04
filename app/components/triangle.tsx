@@ -28,8 +28,8 @@ const Triangle = ({
 }: TriangleProps) => {
   const triangleData = generateTriangle(size, generator)
   return (
-    <div className="triangle mt-4 flex flex-col">
-      <div className="row flex flex-row">
+    <div className="triangle mt-4 flex flex-col  scale-75 relative origin-top-left">
+      <div className="row flex flex-row ">
         <div className="border-r w-6 border-b h-6 text-right"></div>
         {triangleData[0].map((cell, i) => (
           <div
