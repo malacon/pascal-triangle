@@ -1,6 +1,7 @@
 import * as React from "react"
 import Triangle from "~/components/triangle"
 import {
+  Cell,
   generateTriangle,
   getBaseRowCells,
   getParallelRowCells,
@@ -12,6 +13,7 @@ export default function Route() {
   const generator = 1
   const triangleData = generateTriangle(size, generator)
   const [toggleBase, setToggleBase] = React.useState(false)
+  console.log(triangleData)
   const highlightExponents = () => {
     const exponents = document.getElementsByClassName("exponent")
     for (let exponent of exponents) {
@@ -38,6 +40,20 @@ export default function Route() {
   const highlightPerpendicularRow = (exp: number) => () => {
     const row = getPerpendicularRowCells(triangleData, exp)
     row.forEach(cell => highlightCell(cell.id)())
+  }
+  const highlightParallelAndPerpendicularRows = (cellId: string) => () => {
+    const cell = triangleData.reduce<Cell | null>((cell, row) => {
+      if (cell) return cell
+      const t = row.reduce<Cell | null>((cell, currentCell) => {
+        if (cell) return cell
+        if (currentCell.id === cellId) return currentCell
+        return cell
+      }, null)
+      return t
+    }, null)
+    highlightPerpendicularRow(cell?.perpendicularRow || 0)()
+    highlightParallelRow(cell?.parallelRow || 0)()
+    highlightCell(cellId)()
   }
   const highlightBaseRow = (exp: number) => () => {
     const row = getBaseRowCells(triangleData, exp)
@@ -116,7 +132,7 @@ export default function Route() {
           </p>
           <p>
             Cells between two parallels drawn from left to right are called
-            cells of the same parallel row, as, for example, cells{" "}
+            cells of the same <b>parallel row</b>, as, for example, cells{" "}
             <Highlight action={highlightParallelRow(1)}>
               {getParallelRowCells(triangleData, 1)
                 .map(c => c.id)
@@ -132,7 +148,7 @@ export default function Route() {
           </p>
           <p>
             Those between two lines are drawn from top to bottom are claeed
-            cells of the same perpendicular row, as for example, cells{" "}
+            cells of the same <b>perpendicular row</b>, as for example, cells{" "}
             <Highlight action={highlightPerpendicularRow(1)}>
               {getPerpendicularRowCells(triangleData, 1)
                 .map(c => c.id)
@@ -166,11 +182,21 @@ export default function Route() {
           </p>
           <p>
             Cells of the same base equidistant from its extremities are called
-            reciprocals, as, for example, E, R and B, D, because the parallel
-            exponent of one is the same as the perpendicular exponent of the
-            other, as is apparent in the above example, where E is in the second
-            perpendicular row and in the fourth parallel row and its reciprocal,
-            R, is in the second parallel row and in the fourth parallel row,
+            reciprocals, as, for example,{" "}
+            <Highlight action={highlightCells(["R", "K"])}>R, K</Highlight> and{" "}
+            <Highlight action={highlightCells(["N", "J"])}>N, J</Highlight>,
+            because the parallel exponent of one is the same as the
+            perpendicular exponent of the other, as is apparent in the above
+            example, where{" "}
+            <Highlight action={highlightParallelAndPerpendicularRows("R")}>
+              R
+            </Highlight>{" "}
+            is in the second perpendicular row and in the fourth parallel row
+            and its reciprocal,{" "}
+            <Highlight action={highlightParallelAndPerpendicularRows("K")}>
+              K
+            </Highlight>
+            , is in the second parallel row and in the fourth parallel row,
             reciprocally. It is very easy to demonstrate that cells with
             exponents reciprocally the same are in the same base and are
             equidistant from its extremities.

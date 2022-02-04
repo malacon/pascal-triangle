@@ -48,7 +48,6 @@ export default function Index() {
     submit(formRef.current)
   }
 
-  // console.log(data)
   return (
     <div className="container p-6">
       <header className="flex flex-row place-items-end space-x-2">
