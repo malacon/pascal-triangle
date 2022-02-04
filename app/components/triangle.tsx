@@ -1,14 +1,30 @@
 import { generateTriangle } from "~/utils/math"
-
+/**
+ *     border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #0080005e;
+    transform: rotate(-135deg);
+    top: -26px;
+    left: -6px;
+    width: 0;
+    height: 0;
+ */
+// "border-y-10 border-y-transparent border-l-10 border-l-green"
+type TriangleProps = {
+  size: number
+  generator: number
+  settings?: {
+    showBisector?: boolean
+    showBase?: boolean
+    highlightExp?: boolean
+    showTriangle?: number | undefined
+  }
+}
 const Triangle = ({
   size = 5,
   generator = 1,
-  settings: { showBase = false, showBisector = false },
-}: {
-  size: number
-  generator: number
-  settings: { showBisector: boolean; showBase: boolean }
-}) => {
+  settings = { showBase: false, showBisector: false, highlightExp: false },
+}: TriangleProps) => {
   const triangleData = generateTriangle(size, generator)
   return (
     <div className="triangle mt-4 flex flex-col">
@@ -16,8 +32,11 @@ const Triangle = ({
         <div className="border-r w-6 border-b h-6 text-right"></div>
         {triangleData[0].map((cell, i) => (
           <div
+            data-type={cell.perpendicularRow}
             key={cell.id}
-            className="border-r border-b w-14 h-6 text-right text-gray-300 pr-1 text-xs flex flex-col justify-end"
+            className={`${
+              settings.highlightExp ? "font-bold text-black" : "text-gray-300"
+            } border-r border-b w-14 h-6 text-right  pr-1 text-xs flex flex-col justify-end transition-all exponent`}
           >
             <span>{cell.perpendicularRow}</span>
           </div>
@@ -25,12 +44,18 @@ const Triangle = ({
       </div>
       {triangleData.map((row, rowNum) => (
         <div key={rowNum} className="row flex flex-row">
-          <div className="border-b w-6 border-r h-14 text-center flex flex-col justify-end text-xs text-gray-300  ">
+          <div
+            data-type={row[0].parallelRow}
+            className={`${
+              settings.highlightExp ? "font-bold text-black" : "text-gray-300"
+            } border-b w-6 border-r h-14 text-center flex flex-col justify-end text-xs transition-all exponent`}
+          >
             <span>{row[0].parallelRow}</span>
           </div>
           {row.map((cell, colNum) => (
             <div
               key={cell.id}
+              id={`cell-${cell.id}`}
               className="cell border-r border-b p-0 m-0 w-14 h-14 text-center relative group cursor-pointer transition-all hover:bg-orange-300"
             >
               <div className="w-14 h-14 flex flex-col absolute top-0 left-0">
@@ -41,7 +66,12 @@ const Triangle = ({
                   <span>{cell.value}</span>
                 </div>
               </div>
-              {showBisector && rowNum === colNum && (
+              <div
+                data-type="triangle"
+                id={`cell-${cell.id}-triangle`}
+                className="hidden absolute transition-all"
+              ></div>
+              {settings.showBisector && rowNum === colNum && (
                 <div
                   data-type="bisector"
                   className="w-20 h-20 flex flex-col absolute top-4 -left-10 rotate-45"
@@ -49,7 +79,7 @@ const Triangle = ({
                   <hr className="bg-gray-400 " />
                 </div>
               )}
-              {showBase && (
+              {settings.showBase && (
                 <div
                   data-type="base"
                   className="w-20 h-20 flex flex-col absolute top-4 left-4 -rotate-45"

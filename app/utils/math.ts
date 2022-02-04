@@ -72,3 +72,18 @@ export const generateTriangle = (
   }
   return tri
 }
+
+export const getParallelRowCells = (triangle: Triangle, exp: number) => {
+  return triangle[exp - 1]
+}
+
+export const getPerpendicularRowCells = (triangle: Triangle, exp: number) => {
+  return triangle.map(row => row[exp - 1]).filter(c => c)
+}
+
+export const getBaseRowCells = (triangle: Triangle, exp: number) => {
+  const cells = new Array(exp).fill(0).map((_, i) => {
+    return triangle[i][exp - 1 - i]
+  })
+  return cells
+}

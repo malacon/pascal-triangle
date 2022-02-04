@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Link } from "react-router-dom"
 import {
   ActionFunction,
   Form,
@@ -59,8 +60,15 @@ export default function Index() {
             target="_blank"
             href="https://web.nmsu.edu/~davidp/hist_projects/pascalII.pdf"
           >
-            original text
+            original text, pdf
           </a>
+          )
+        </span>
+        <span>
+          (
+          <Link className="text-blue-700 underline" to="text">
+            Interactive Text
+          </Link>
           )
         </span>
       </header>

@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .bottom-triangle {
+    @apply border-y-[40px] border-y-transparent border-l-[40px] border-l-green-500/50 rotate-[-135deg] top-[-26px] left-[-6px];
+  }
+  .full-square {
+    @apply bg-green-500/50 w-full h-full;
+  }
+}
