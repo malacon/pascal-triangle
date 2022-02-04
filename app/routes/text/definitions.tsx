@@ -12,13 +12,14 @@ export default function Route() {
   const size = 6
   const generator = 1
   const triangleData = generateTriangle(size, generator)
-  const [toggleBase, setToggleBase] = React.useState(false)
+  const [toggleBases, setToggleBases] = React.useState(false)
+  const [toggleBase, setToggleBase] = React.useState<number>()
   console.log(triangleData)
   const highlightExponents = () => {
     const exponents = document.getElementsByClassName("exponent")
     for (let exponent of exponents) {
       exponent.classList.toggle("font-bold")
-      exponent.classList.toggle("text-black")
+      exponent.classList.toggle("text-gray-900")
       exponent.classList.toggle("text-base")
     }
   }
@@ -58,6 +59,38 @@ export default function Route() {
   const highlightBaseRow = (exp: number) => () => {
     const row = getBaseRowCells(triangleData, exp)
     row.forEach(cell => highlightCell(cell.id)())
+  }
+  const perpendicularExponentBase = (cellId: string) => () => {
+    highlightCell(cellId)()
+    const cell = document.getElementById(`cell-${cellId}`)
+    const parallelRow = cell?.dataset.parallelRow
+    const perpendicularRow = cell?.dataset.perpendicularRow
+    const exponents = document.getElementsByClassName("exponent")
+    setToggleBase(num =>
+      num ? undefined : Number(parallelRow) + Number(perpendicularRow) - 1
+    )
+
+    for (let exponent of exponents) {
+      let exp = exponent as HTMLElement
+      if (
+        (exp.dataset.type === "exponent-parallelRow" &&
+          exp.dataset.value === parallelRow) ||
+        (exp.dataset.type === "exponent-perpendicularRow" &&
+          exp.dataset.value === perpendicularRow)
+      ) {
+        console.log("TOGGLING")
+        exp.classList.toggle("text-2xl")
+        exp.classList.toggle("text-gray-900")
+      }
+      if (
+        exp.dataset.type === "exponent-parallelRow" &&
+        Number(exp.dataset.value) ===
+          Number(perpendicularRow) + Number(parallelRow) - 1
+      ) {
+        exp.classList.toggle("text-2xl")
+        exp.classList.toggle("text-green-500")
+      }
+    }
   }
 
   const highlightTriangle = (exp: number) => () => {
@@ -120,7 +153,7 @@ export default function Route() {
           </p>
           <p>
             And in this way{" "}
-            <Highlight action={() => setToggleBase(curr => !curr)}>
+            <Highlight action={() => setToggleBases(curr => !curr)}>
               connecting all the points of section with the same exponent
             </Highlight>
             , I construct as many triangles and bases as there are exponents.
@@ -203,8 +236,12 @@ export default function Route() {
           </p>
           <p>
             It is also very easy to demonstrate that the perpendicular exponent
-            of any cell when added to is parallel exponent exceeds by unity the
-            exponent of its base.
+            of{" "}
+            <Highlight action={perpendicularExponentBase("R")}>
+              any cell
+            </Highlight>{" "}
+            when added to is parallel exponent exceeds by unity the exponent of
+            its base.
           </p>
         </div>
 
@@ -213,7 +250,8 @@ export default function Route() {
             generator={generator}
             size={size}
             settings={{
-              showBisector: true,
+              showBisector: false,
+              showBases: toggleBases,
               showBase: toggleBase,
             }}
           />
