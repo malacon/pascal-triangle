@@ -5,7 +5,6 @@ const useNextLink = () => {
   const base = "/text/"
   const matches = useMatches()
   const currentLink = matches[matches.length - 1].pathname.replace(base, "")
-  console.log(currentLink, navigationLinks)
   return navigationLinks.reduce<LinkType | undefined>(
     (link, section, i, linkSections) => {
       const idx = section.links.findIndex(l => l.url === currentLink)
