@@ -1,3 +1,4 @@
+import * as React from "react"
 import { generateTriangle } from "~/utils/math"
 /**
  *     border-top: 40px solid transparent;
@@ -10,16 +11,41 @@ import { generateTriangle } from "~/utils/math"
     height: 0;
  */
 // "border-y-10 border-y-transparent border-l-10 border-l-green"
-type TriangleProps = {
+
+export const useTriangleState = ({
+  generator = 1,
+  size = 5,
+  settings = {},
+}: {
+  generator?: number
+  size?: number
+  settings?: TriangleSettings
+}) => {
+  const [gen, setGen] = React.useState(generator)
+  const [s, setS] = React.useState(size)
+  const [set, setSet] = React.useState(settings)
+
+  return {
+    size: s,
+    setSize: setS,
+    generator: gen,
+    setGenerator: setGen,
+    settings: set,
+    setSettings: setSet,
+  }
+}
+
+export type TriangleProps = {
   size: number
   generator: number
-  settings?: {
-    showBisector?: boolean
-    showBase?: number
-    showBases?: boolean
-    highlightExp?: boolean
-    showTriangle?: number | undefined
-  }
+  settings?: TriangleSettings
+}
+export type TriangleSettings = {
+  showBisector?: boolean
+  showBase?: number
+  showBases?: boolean
+  highlightExp?: boolean
+  showTriangle?: number | undefined
 }
 const Triangle = ({
   size = 5,

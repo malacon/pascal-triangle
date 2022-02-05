@@ -1,6 +1,15 @@
 import * as React from "react"
 import { Link } from "remix"
-import Triangle from "~/components/triangle"
+import { Highlight } from "~/components/highlight"
+import {
+  Body,
+  BodyContent,
+  BodyHeader,
+  LeftContent,
+  RightContent,
+  TriangleContentScrollable,
+} from "~/components/layout"
+import Triangle, { TriangleSettings } from "~/components/triangle"
 import {
   Cell,
   generateTriangle,
@@ -130,12 +139,10 @@ export default function Route() {
   }
 
   return (
-    <div className="overflow-hidden h-screen flex flex-col">
-      <header className="bg-slate-700 text-gray-100 p-2">
-        <h3 className="text-2xl font-bold">Definitions</h3>
-      </header>
-      <div className="flex-1 flex flex-row space-x-4 overflow-hidden">
-        <div className="flex flex-col space-y-2 flex-1 overflow-auto p-2">
+    <Body>
+      <BodyHeader title={"Definitions"} />
+      <BodyContent>
+        <LeftContent>
           <p>I call arithmetical triangle a figure constructed as follows:</p>
           <p>
             From any point, <Highlight action={highlightCell("G")}>G</Highlight>
@@ -317,35 +324,20 @@ export default function Route() {
           >
             Next
           </Link>
-        </div>
+        </LeftContent>
 
-        <div className="w-[400px] margin-auto overflow-auto">
-          <div className="overflow-auto w-fit">
-            <Triangle
-              generator={generator}
-              size={size}
-              settings={{
-                showBisector: false,
-                showBases: toggleBases,
-                showBase: toggleBase,
-              }}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-type HighlightProps = { action: () => void; children: React.ReactNode }
-const Highlight = ({ action, children }: HighlightProps) => {
-  return (
-    <span
-      className="underline font-bold cursor-pointer"
-      onMouseOver={action}
-      onMouseOut={action}
-    >
-      {children}
-    </span>
+        <RightContent>
+          <TriangleContentScrollable
+            generator={generator}
+            size={size}
+            settings={{
+              showBisector: false,
+              showBases: toggleBases,
+              showBase: toggleBase,
+            }}
+          />
+        </RightContent>
+      </BodyContent>
+    </Body>
   )
 }
