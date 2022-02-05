@@ -237,8 +237,8 @@ export default function Route() {
           <p>
             Cells of the same base equidistant from its extremities are called
             reciprocals, as, for example,{" "}
-            <Highlight action={highlightCells(["R", "K"])}>R, K</Highlight> and{" "}
-            <Highlight action={highlightCells(["N", "J"])}>N, J</Highlight>,
+            <Highlight action={highlightCells(["R", "L"])}>R, L</Highlight> and{" "}
+            <Highlight action={highlightCells(["N", "AC"])}>N, AC</Highlight>,
             because the parallel exponent of one is the same as the
             perpendicular exponent of the other, as is apparent in the above
             example, where{" "}
@@ -247,8 +247,8 @@ export default function Route() {
             </Highlight>{" "}
             is in the second perpendicular row and in the fourth parallel row
             and its reciprocal,{" "}
-            <Highlight action={highlightParallelAndPerpendicularRows("K")}>
-              K
+            <Highlight action={highlightParallelAndPerpendicularRows("L")}>
+              L
             </Highlight>
             , is in the second parallel row and in the fourth parallel row,
             reciprocally. It is very easy to demonstrate that cells with
