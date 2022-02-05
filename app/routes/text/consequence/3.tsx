@@ -26,25 +26,25 @@ export default function FirstConsequenceRoute() {
 
   return (
     <Body>
-      <BodyHeader title={"2nd Consequence"} />
+      <BodyHeader title={"3rd Consequence"} />
       <BodyContent>
         <LeftContent>
           <Description>
             In every arithmetical triangle each cell is equal to the sum of all
-            the cells of the preceding parallel row from its own perpendicular
+            the cells of the preceding perpendicular row from its own parallel
             row to the first, inclusive.
           </Description>
           <p>
             Let any cell,{" "}
-            <Highlight action={highlightCellsAdd(["J", "K", "L", "M"], "T")}>
-              T
+            <Highlight action={highlightCellsAdd(["B", "K", "R"], "S")}>
+              S
             </Highlight>
             , be taken. I say that it is equal to{" "}
-            <Highlight action={highlightCellsAdd(["J", "K", "L", "M"], "T")}>
-              J + K + L + M
+            <Highlight action={highlightCellsAdd(["B", "K", "R"], "S")}>
+              B + K + R
             </Highlight>
-            , which are the cells of the next higher parallel row from the
-            perpendicular row of ω to the first perpendicular row.
+            , which are the cells of the preceding perpendicular row from the
+            parallel row of cell S to the first parallel row.
           </p>
           <p>
             This is evident if we simply consider a cell as the sum of its
