@@ -1,9 +1,9 @@
 import { Link, NavLink, Outlet, useCatch } from "remix"
 
-type LinkType = { name: string; url: string }
-type LinksSection = { name: string; links: Array<LinkType> }
+export type LinkType = { name: string; url: string }
+export type LinksSection = { name: string; links: Array<LinkType> }
 
-const links: Array<LinksSection> = [
+export const navigationLinks: Array<LinksSection> = [
   {
     name: "Definitions",
     links: [{ name: "Definitions", url: "definitions" }],
@@ -38,7 +38,7 @@ export default function TextRoute() {
           </span>
         </header>
         <nav>
-          {links.map((section, i) => (
+          {navigationLinks.map((section, i) => (
             <ul key={section.name} className={`first:border-t border-b py-2`}>
               {section.links.map(link => (
                 <li key={link.url} className={`hover:bg-gray-300 w-full`}>

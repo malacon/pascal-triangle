@@ -9,6 +9,7 @@ import {
   RightContent,
   TriangleContentScrollable,
 } from "~/components/layout"
+import { NextButton } from "~/components/nextLink"
 import { useTriangleState } from "~/components/triangle"
 
 export default function FirstConsequenceRoute() {
@@ -61,6 +62,7 @@ export default function FirstConsequenceRoute() {
             </div>
           </div>
           <p>And similarly of the rest.</p>
+          <NextButton />
         </LeftContent>
         <RightContent>
           <TriangleContentScrollable

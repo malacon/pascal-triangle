@@ -9,6 +9,7 @@ import {
   RightContent,
   TriangleContentScrollable,
 } from "~/components/layout"
+import { NextButton } from "~/components/nextLink"
 import { useTriangleState } from "~/components/triangle"
 
 export default function FirstConsequenceRoute() {
@@ -41,6 +42,7 @@ export default function FirstConsequenceRoute() {
             This is evident if we simply consider a cell as the sum of its
             component cells.
           </p>
+          <NextButton />
         </LeftContent>
         <RightContent>
           <TriangleContentScrollable
