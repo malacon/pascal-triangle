@@ -19,6 +19,10 @@ export const navigationLinks: Array<LinksSection> = [
       { name: "6th Consequence", url: "consequence/6" },
       { name: "7th Consequence", url: "consequence/7" },
       { name: "8th Consequence", url: "consequence/8" },
+      { name: "9th Consequence", url: "consequence/9" },
+      { name: "10th Consequence", url: "consequence/10" },
+      { name: "11th Consequence", url: "consequence/11" },
+      { name: "12th Consequence", url: "consequence/12" },
     ],
   },
 ]

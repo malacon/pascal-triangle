@@ -4,7 +4,16 @@ export type Cell = {
   parallelRow: number
   perpendicularRow: number
 }
+export type Cell2 = {
+  id: string
+  value: number
+  isSelected: boolean
+  color: string
+  parallelRow: number
+  perpendicularRow: number
+}
 export type Triangle = Array<Array<Cell>>
+export type Triangle2 = Array<Array<Cell2>>
 
 const generateCell = (
   parallelRow: number,
@@ -86,4 +95,39 @@ export const getBaseRowCells = (triangle: Triangle, exp: number) => {
     return triangle[i][exp - 1 - i]
   })
   return cells
+}
+
+type TriangleGeneratorProps = {
+  size?: number
+  generator?: number
+  selectedCells?: Array<{ id: string; color: string }>
+  bisector?: boolean
+  showBases?: Array<number> | "all"
+}
+export const generateTriangle2 = ({
+  size = 5,
+  generator = 1,
+  selectedCells,
+  bisector = false,
+  showBases,
+}: TriangleGeneratorProps): Triangle2 => {
+  currentId = 1
+  let tri = []
+  for (let row = size; row >= 1; row--) {
+    let currRow: Cell2[] = []
+    for (let col = 1; col <= row; col++) {
+      const id = generateId()
+      const selected = selectedCells?.find(s => s.id === id)
+      currRow.push({
+        id,
+        isSelected: Boolean(selected),
+        color: selected?.color || "white",
+        value: generateCell(size - row + 1, col, generator),
+        parallelRow: size - row + 1,
+        perpendicularRow: col,
+      })
+    }
+    tri.push(currRow)
+  }
+  return tri
 }

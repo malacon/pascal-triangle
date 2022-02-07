@@ -13,7 +13,10 @@ import { NextButton } from "~/components/nextLink"
 import { useTriangleState } from "~/components/triangle"
 
 export default function FirstConsequenceRoute() {
-  const { size, generator, settings } = useTriangleState({ size: 8 })
+  const { size, generator, settings } = useTriangleState({
+    size: 8,
+    settings: { isScaled: true },
+  })
   const highlightCellsAdd = (addendsIds: string[], sumId: string) => () => {
     addendsIds.forEach(id => {
       const cell = document.getElementById(`cell-${id}`)

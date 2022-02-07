@@ -9,14 +9,14 @@ import {
   useLoaderData,
   useSubmit,
 } from "remix"
-import { generateTriangle, Triangle } from "~/utils/math"
+import Triangle, { TriangleSettings } from "~/components/triangle"
+import { generateTriangle, Triangle as TTriangle } from "~/utils/math"
 
 type LoaderData = {
-  triangle: Triangle
+  triangle: TTriangle
   size: number
   generator: number
-  showBase: boolean
-  showBisector: boolean
+  settings: TriangleSettings
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -25,16 +25,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   let url = new URL(request.url)
   let size = Number(url.searchParams.get("size") || defaultSize)
   let generator = Number(url.searchParams.get("generator") || defaultGenerator)
-  let showBase = url.searchParams.get("showBase") === "on"
-  let showBisector = url.searchParams.get("showBisector") === "on"
+  let settings: TriangleSettings = {
+    showBases: url.searchParams.get("showBases") === "on",
+    showBisector: url.searchParams.get("showBisector") === "on",
+    rotate: url.searchParams.get("rotate") === "on",
+    colorOdd: url.searchParams.get("colorOdd") === "on",
+    hideValue: url.searchParams.get("hideValue") === "on",
+    isScaled: url.searchParams.get("isScaled") === "on",
+  }
 
   const triangle = generateTriangle(size, generator)
   const data: LoaderData = {
     triangle,
     size,
     generator,
-    showBase,
-    showBisector,
+    settings,
   }
   return json(data)
 }
@@ -103,16 +108,16 @@ export default function Index() {
             <h3 className="font-bold ">Show</h3>
             <label
               className=" flex flex-row place-items-center justify-between"
-              htmlFor="showBase"
+              htmlFor="showBases"
             >
               <span>Bases</span>
               <input
-                name="showBase"
-                id="showBase"
+                name="showBases"
+                id="showBases"
                 className="border rounded  p-2"
                 type="checkbox"
                 onChange={e => submitForm()}
-                defaultChecked={data.showBase}
+                defaultChecked={data.settings.showBases}
               />
             </label>
             <label
@@ -126,7 +131,69 @@ export default function Index() {
                 className="border rounded p-2"
                 type="checkbox"
                 onChange={e => submitForm()}
-                defaultChecked={data.showBisector}
+                defaultChecked={data.settings.showBisector}
+              />
+            </label>
+          </fieldset>
+          <fieldset className="border p-2 flex flex-col w-32 space-y-1">
+            <h3 className="font-bold ">Show</h3>
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="rotate"
+            >
+              <span>Rotate</span>
+              <input
+                name="rotate"
+                id="rotate"
+                className="border rounded  p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.settings.rotate}
+              />
+            </label>
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="colorOdd"
+            >
+              <span>Color Odd</span>
+              <input
+                name="colorOdd"
+                id="colorOdd"
+                className="border rounded  p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.settings.colorOdd}
+              />
+            </label>
+          </fieldset>
+          <fieldset className="border p-2 flex flex-col w-32 space-y-1">
+            <h3 className="font-bold ">Show</h3>
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="hideValue"
+            >
+              <span>Hide Value</span>
+              <input
+                name="hideValue"
+                id="hideValue"
+                className="border rounded  p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.settings.hideValue}
+              />
+            </label>
+            <label
+              className=" flex flex-row place-items-center justify-between"
+              htmlFor="isScaled"
+            >
+              <span>isScaled</span>
+              <input
+                name="isScaled"
+                id="isScaled"
+                className="border rounded  p-2"
+                type="checkbox"
+                onChange={e => submitForm()}
+                defaultChecked={data.settings.isScaled}
               />
             </label>
           </fieldset>
@@ -138,51 +205,11 @@ export default function Index() {
           Generate
         </button>
       </Form>
-      <div className="triangle mt-4 flex flex-col">
-        <div className="row flex flex-row">
-          <div className="border-r w-6 border-b h-6 text-right"></div>
-          {data.triangle[0].map((cell, i) => (
-            <div
-              key={cell.id}
-              className="border-r border-b w-14 h-6 text-right text-gray-300 pr-1 text-xs flex flex-col justify-end"
-            >
-              <span>{cell.perpendicularRow}</span>
-            </div>
-          ))}
-        </div>
-        {data.triangle.map((row, rowNum) => (
-          <div key={rowNum} className="row flex flex-row">
-            <div className="border-b w-6 border-r h-14 text-center flex flex-col justify-end text-xs text-gray-300  ">
-              <span>{row[0].parallelRow}</span>
-            </div>
-            {row.map((cell, colNum) => (
-              <div
-                key={cell.id}
-                className="cell border-r border-b p-0 m-0 w-14 h-14 text-center relative group cursor-pointer transition-all hover:bg-orange-300"
-              >
-                <div className="w-14 h-14 flex flex-col absolute top-0 left-0">
-                  <div className="absolute h-full w-full flex place-items-start text-sm text-gray-400 group-hover:text-gray-700 transition-all">
-                    <span className=" pl-1">{cell.id}</span>
-                  </div>
-                  <div className="absolute mx-auto h-full w-full align-middle flex place-items-center justify-center group-hover:text-xl transition-all">
-                    <span>{cell.value}</span>
-                  </div>
-                </div>
-                {data.showBisector && rowNum - 1 === colNum && (
-                  <div className="w-20 h-20 flex flex-col absolute bottom-4 right-4 rotate-45">
-                    <hr className="bg-gray-400 " />
-                  </div>
-                )}
-                {data.showBase && (
-                  <div className="w-20 h-20 flex flex-col absolute top-4 left-4 -rotate-45">
-                    <hr className="bg-gray-400 " />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+      <Triangle
+        generator={data.generator}
+        size={data.size}
+        settings={data.settings}
+      />
     </div>
   )
 }

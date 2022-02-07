@@ -330,6 +330,7 @@ export default function Route() {
               showBisector: false,
               showBases: toggleBases,
               showBase: toggleBase,
+              isScaled: true,
             }}
           />
         </RightContent>

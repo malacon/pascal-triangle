@@ -15,6 +15,10 @@ import { useTriangleState } from "~/components/triangle"
 export default function FirstConsequenceRoute() {
   const { size, generator, setGenerator, settings } = useTriangleState({
     size: 8,
+    settings: {
+      // showBisector: true,
+      isScaled: true,
+    },
   })
   const highlightCells = (ids: string[]) => () => {
     ids.forEach(id => {
