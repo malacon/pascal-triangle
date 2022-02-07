@@ -209,7 +209,7 @@ export default function Index() {
               Sum of Base: <b>{sum}</b>
             </div>
             <div>
-              Product of Base: <b>{product}</b>
+              Power of 11: <b>{product}</b>
             </div>
           </div>
         </div>
