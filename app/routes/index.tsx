@@ -48,6 +48,13 @@ export default function Index() {
   const submit = useSubmit()
   const data = useLoaderData<LoaderData>()
   const formRef = React.useRef(null)
+  const [sum, setSum] = React.useState<number>()
+  const [product, setProduct] = React.useState<number>()
+
+  const callback = (sum: number, product: number) => {
+    setSum(sum)
+    setProduct(product)
+  }
 
   const submitForm = () => {
     submit(formRef.current)
@@ -197,6 +204,14 @@ export default function Index() {
               />
             </label>
           </fieldset>
+          <div className="border p-2  space-y-1">
+            <div>
+              Sum of Base: <b>{sum}</b>
+            </div>
+            <div>
+              Product of Base: <b>{product}</b>
+            </div>
+          </div>
         </div>
         <button
           type="submit"
@@ -209,6 +224,7 @@ export default function Index() {
         generator={data.generator}
         size={data.size}
         settings={data.settings}
+        callback={callback}
       />
     </div>
   )

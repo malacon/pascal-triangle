@@ -39,10 +39,12 @@ export type TriangleProps = {
   size: number
   generator: number
   settings?: TriangleSettings
+  callback?: (sum: number, product: number) => void
 }
 export type TriangleSettings = {
   showBisector?: boolean
   showBase?: number
+  showBaseInternal?: number
   showBases?: boolean
   highlightExp?: boolean
   showTriangle?: number | undefined
@@ -58,20 +60,36 @@ const Triangle = ({
     showBisector: false,
     highlightExp: false,
     showBases: false,
+    showBase: 1,
+    showBaseInternal: 1,
     isScaled: true,
     rotate: false,
     colorOdd: false,
     hideValue: false,
   },
+  callback,
 }: TriangleProps) => {
   const triangleData = generateTriangle(size, generator)
   const leftShift = { left: `${size * 40}px` }
   const [currentSettings, setCurrentSettings] = React.useState(settings)
 
   React.useEffect(() => {
-    console.log("settings")
+    setCurrentSettings(currentSettings)
+    const bases = triangleData
+      .flat()
+      .filter(
+        c => c.parallelRow + c.perpendicularRow - 1 === currentSettings.showBase
+      )
+    const sum = bases.reduce((sum, c) => sum + c.value, 0)
+    const product = bases.reduce(
+      (product, c, i) => product + 10 ** i * c.value,
+      0
+    )
+    callback && callback(sum, product)
+  }, [currentSettings])
+  React.useEffect(() => {
     setCurrentSettings(settings)
-  }, [currentSettings, settings])
+  }, [settings])
 
   return (
     <div
@@ -101,7 +119,7 @@ const Triangle = ({
             updateSettings={setCurrentSettings}
           />
           {row.map(cell => (
-            <Cell key={cell.id} cell={cell} settings={settings} />
+            <Cell key={cell.id} cell={cell} settings={currentSettings} />
           ))}
         </div>
       ))}
@@ -123,19 +141,24 @@ const Exponent = ({
 }) => {
   const [state, setState] = React.useState<ExponentState>("idle")
 
-  React.useEffect(() => {
-    if (state === "selected") {
-      const currentBase = settings.showBase
-      console.log("exponent", currentBase, value)
-      updateSettings(settings => ({
-        ...settings,
-        showBase: currentBase === value ? undefined : value,
-      }))
-    }
-  }, [state])
+  // React.useEffect(() => {
+  //   if (state === "selected") {
+  //     const currentBase = settings.showBase
+  //     console.log("exponent", currentBase, value)
+  //     updateSettings(settings => ({
+  //       ...settings,
+  //       showBase: currentBase === value ? undefined : value,
+  //     }))
+  //   }
+  // }, [state])
 
   const handleToggleBase = () => {
     setState(state => (state === "idle" ? "selected" : "idle"))
+    const currentBase = settings.showBase
+    updateSettings(settings => ({
+      ...settings,
+      showBase: currentBase === value ? undefined : value,
+    }))
   }
 
   return (
@@ -198,6 +221,7 @@ const Cell = ({
       <div
         data-type="triangle"
         id={`cell-${cell.id}-triangle`}
+        data-base={settings.showBaseInternal}
         className="hidden absolute transition-all"
       ></div>
       {settings.showBisector && cell.parallelRow === cell.perpendicularRow && (
@@ -208,7 +232,9 @@ const Cell = ({
           <hr className="bg-gray-400 " />
         </div>
       )}
-      {(settings.showBase === cell.parallelRow + cell.perpendicularRow - 1 ||
+      {(settings.showBaseInternal ===
+        cell.parallelRow + cell.perpendicularRow - 1 ||
+        settings.showBase === cell.parallelRow + cell.perpendicularRow - 1 ||
         settings.showBases) && (
         <div
           data-type="base"
